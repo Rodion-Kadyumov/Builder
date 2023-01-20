@@ -1,25 +1,36 @@
 public class Main {
     public static void main(String[] args) {
-        Person mom = new PersonBuilder()
-                .setName("Алина")
+
+        Person person = new PersonBuilderImp()
+                .setName("Алия")
                 .setSurname("Аля")
-                .setAge(31)
-                .setAddress("Канада")
+                .setAge(19)
+                .setAddress("Екатеринбург")
                 .build();
-        Person son = mom.newChildBuilder()
-                .setName("Аристарх")
+        System.out.println(person);
+
+        Person person2 = new PersonBuilderImp()
+                .setName("Наталья")
+                .setSurname("Фетисова")
+                .setAddress("Магнитогорск")
                 .build();
-        System.out.println("У " + mom + " есть сын, " + son);
+        System.out.println(person2);
+
+        Person person3 = person.newChildBuilder(2)
+                .setName("Саша")
+                .build();
+
+        System.out.println(person3);
 
         try {
-            new PersonBuilder().build();
-        } catch (IllegalStateException e) {
+            Person person4 = new PersonBuilderImp().setAge(300).build();
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 
         try {
-            new PersonBuilder().setAge(-100).build();
-        } catch (IllegalArgumentException e) {
+            Person person5 = new PersonBuilderImp().setAge(15).build();
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
     }

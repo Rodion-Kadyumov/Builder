@@ -1,16 +1,9 @@
-import java.util.Objects;
-import java.util.OptionalInt;
-
 public class Person {
-    protected final String name;
-    protected final String surname;
-    protected int age;
-    protected String address;
 
-    public Person(String name, String surname) {
-        this.name = name;
-        this.surname = surname;
-    }
+    private final String name;
+    private final String surname;
+    private int age;
+    private String address; //
 
     public Person(String name, String surname, int age) {
         this.name = name;
@@ -18,11 +11,11 @@ public class Person {
         this.age = age;
     }
 
-    public boolean hasAge() {
-        return age >= 0;
-    }
-    public boolean hasAddress() {
-        return address != null;
+    public PersonBuilderImp newChildBuilder(int age) {
+        return new PersonBuilderImp()
+                .setSurname(this.surname)
+                .setAddress(this.address)
+                .setAge(age);
     }
 
     public String getName() {
@@ -33,47 +26,51 @@ public class Person {
         return surname;
     }
 
-    public OptionalInt getAge() {
-        return OptionalInt.of(age);
+    public int getAge() {
+        return age;
     }
 
     public String getAddress() {
-        return address;
+        return (address == null) ? "неизвестен" : address;
     }
 
-    public String setAddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
-        return this.address;
     }
 
     public void happyBirthday() {
-        if (hasAge()) age++;
+        age++;
     }
 
-    public PersonBuilder newChildBuilder() {
-        return new PersonBuilder().setSurname(surname).setAddress(address);
+    public boolean hasAge() {
+        return age != 0;
+    }
+
+    public boolean hasAdress() {
+        return address != null;
     }
 
     @Override
     public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", address='" + address + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return age == person.age && name.equals(person.name) && surname.equals(person.surname) && Objects.equals(address, person.address);
+        String ageString = "неизвестен";
+        String addressString = "неизвестен";
+        if (this.hasAge()) {
+            ageString = String.valueOf(age);
+        }
+        if (this.hasAdress()) {
+            addressString = address;
+        }
+        return name + " " + surname + ", возраст " + ageString + ", адрес " + addressString + ".";
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname);
+        final int prime = 17;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((surname == null) ? 0 : surname.hashCode());
+        result = prime * result + age;
+        result = prime * result + ((address == null) ? 0 : address.hashCode());
+        return result;
     }
 }
